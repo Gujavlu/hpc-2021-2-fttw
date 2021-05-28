@@ -6,7 +6,7 @@ Parallelization of the fast fourier transform (1d) in C.
 - [FFTW  library](http://www.fftw.org/)
 
 ## Run
-### Processing toy signal and printing it to a file (fftw3+mpi implemented)
+### Processing toy signal and printing its fft to a file (fftw3+mpi implemented)
 ##### IN:
 ```
 gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
