@@ -1,6 +1,14 @@
 #Simple way to read and print some samples
+"""
+ Guarda los datos en señales reales e imaginarias
+
+Recibe y gusrda las señales separándolas en dos archivos de text, uno para los reales y otro para los imaginarios.
+frecuencia_central.- 96.7MHz
+sdr.sample_rate =  230000 #230KHz
+sdr.freq_correction = 1   # PPM
+sdr.gain = 'auto'Sample_rate = 230KHz
+"""
 from rtlsdr import RtlSdr
-from math import e
 import numpy as np 
 import sys
 
@@ -23,7 +31,7 @@ def read_print_samples(center_freq):
     """
     sdr.center_freq = center_freq     # Hz 
 
-    sdr.sample_rate =  230000 #66KHz
+    sdr.sample_rate =  230000 #230KHz
     """
     #Teorema de Nyquist  # Hz
     sample_rate óptimo: 2B
@@ -44,3 +52,10 @@ def read_print_samples(center_freq):
 if __name__=="__main__":
     #print(read_print_samples( int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3]) ) )
     read_print_samples( int(sys.argv[1]) ) #Frecuencia central (estación de radio[Hz])
+
+
+"""
+    python3 <estación de radio en Hertz>
+    python3 96700000 
+        96.7MHz
+"""
