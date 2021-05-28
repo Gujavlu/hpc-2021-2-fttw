@@ -1,0 +1,29 @@
+	#include<stdio.h>
+
+	/* Our structure */
+	struct Complex
+    //signal
+	{
+		float real, imaginary;
+	};
+
+	int main()
+	{
+		int counter;
+		FILE *ptr_myfile;
+		struct Complex signal;
+
+		ptr_myfile=fopen("samples.iq","rb");
+		if (!ptr_myfile)
+		{
+			printf("Unable to open file!\n");
+			return 1;
+		}
+		for ( counter=1; counter <= 15; counter++)
+		{
+			fread(&signal,sizeof(struct Complex),1,ptr_myfile);
+			printf("%f\n",signal.real);
+		}
+		fclose(ptr_myfile);
+		return 0;
+	}
