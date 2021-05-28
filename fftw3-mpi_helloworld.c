@@ -5,7 +5,7 @@
 //#define M_PI 3.14159265358979323846
 
 
-void print_complex_array(fftw_complex arr[], int n){
+void print_complex_array(const fftw_complex arr[], const int n){
     int i;
     for(i=0; i < n; i++)
         printf("%f %f\n", arr[i][0],arr[i][1]);
