@@ -1,61 +1,70 @@
-#Simple way to read and print some samples
 """
- Guarda los datos en señales reales e imaginarias
+Saves data in a binary file of real and imaginary signals
 
-Recibe y gusrda las señales separándolas en dos archivos de text, uno para los reales y otro para los imaginarios.
-frecuencia_central.- 96.7MHz
-sdr.sample_rate =  230000 #230KHz
-sdr.freq_correction = 1   # PPM
-sdr.gain = 'auto'Sample_rate = 230KHz
+Copyright (C) 2021 Juan Luis Ruiz Vanegas (juanluisruiz971@comunidad.unam.mx)
+
+MIT License
+
+A short and simple permissive license with conditions only requiring preservation of copyright and license notices. 
+Licensed works, modifications, and larger works may be distributed under different terms and without source code.
 """
+
 from rtlsdr import RtlSdr
 import numpy as np 
 import sys
 
-#def read_print_samples(sample_rate, center_freq, freq_correction):
+
 def read_print_samples(center_freq):
     """
     input:
     center_freq.- Get/Set the center frequency of the device (in Hz)
 
     output:
-    samples.- numpy array
+    samples.iq .- binary file
     """
     sdr = RtlSdr()
-    
-    # configure device
+
     """
     sdr.sample_rate = 2.048e6  # Hz
     sdr.center_freq = 70e6     # Hz
     sdr.freq_correction = 60   # PPM
     """
     sdr.center_freq = center_freq     # Hz 
-
     sdr.sample_rate =  230000 #230KHz
     """
-    #Teorema de Nyquist  # Hz
-    sample_rate óptimo: 2B
-    Frecuencia de muestreo debe ser dos veces el ancho de banda
+    #Nyquist theorem # Hz
+    optimum sample_rate: 2B
+    Sample rate should be twice the bandwidth
     """
-    sdr.freq_correction = 1   # PPM
+    sdr.freq_correction = 1 #PPM
     sdr.gain = 'auto'
     
     samples = sdr.read_samples(512) #number  of  samples  or  bytes  to  read 
 
-    np.savetxt('samples_real.txt', samples.real, fmt='%10.15f' )
-    np.savetxt('samples_imag.txt', samples.imag, fmt='%10.15f' )
-    ##Por ahora lo voy a guardar como txt, pero seguiré en la busqueda de un formato mejor para la transferencia de archivos. 
-    ##npy parecía buena opción
-    #np.save('samples.npy',samples)
+    # Now save to an IQ file
+    samples = samples.astype(np.complex64) # Convert to 64
+    print(type(samples[0])) # Verify it's 64
+    samples.tofile('samples.iq') # Save to file
 
+    """
+    In Python, the default complex type is np.complex128, which uses two 64-bit floats per sample. 
+    But in DSP/SDR, we tend to use 32-bit floats instead because the ADCs on our SDRs don’t have that
+     much precision to warrant 64-bit floats. In Python we will use np.complex64, which uses two 
+     32-bit floats. When you are simply processing a signal in Python it doesn’t really matter, 
+     but when you go to save the 1d array to a file, you want to make sure it’s an array of 
+     np.complex64 first.
+
+     https://pysdr.org/content/iq_files.html
+    """
 
 if __name__=="__main__":
-    #print(read_print_samples( int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3]) ) )
-    read_print_samples( int(sys.argv[1]) ) #Frecuencia central (estación de radio[Hz])
+    read_print_samples( int(sys.argv[1]) ) #Center frequency (radio station [Hz])
 
 
 """
-    python3 <estación de radio en Hertz>
+To Run the code:
+
+    python3 <Radio station in Hertz>
     python3 96700000 
         96.7MHz
 """
