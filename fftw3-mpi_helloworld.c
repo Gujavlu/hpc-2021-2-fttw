@@ -71,9 +71,15 @@ int main(int argc, char ** argv){
     // NOW THE TRANSFORM
     fftw_execute(p);
     
-    // PRINTING THE OUTPUT (of each process)
-    print_complex_array(local_out, local_ni);
-    
+    // PRINTING THE OUTPUT (of each process) (in order)
+    //print_complex_array(local_out, local_ni); // use just this line but it won't be in order
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    for(i=0;i<world_size;i++){
+        if(i==rnk)
+            print_complex_array(local_out, local_ni);
+        MPI_Barrier(MPI_COMM_WORLD);
+    }
     
     // END AND CLEANUP
     fftw_mpi_cleanup();
