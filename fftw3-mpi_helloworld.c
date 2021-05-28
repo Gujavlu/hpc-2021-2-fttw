@@ -15,14 +15,14 @@ void print_complex_array(fftw_complex arr[], int n){
 int main(int argc, char ** argv){
     // DECLARING NECESSARY VARIABLES
     const ptrdiff_t N = 128;
-    fftw_complex *in, *out;
+    fftw_complex *in;//, *out;
     fftw_plan p;
     ptrdiff_t alloc_local, local_ni, local_no, local_i_start, local_o_start;
     
     // ALLOCATING AND LOADING TOY INPUT
     // It must be kind of pointless to be working in paralel and saving the whole sample in all processes but this is just for practice (the next 2 lines):
     in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
+    //out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * N);
     double x_values[N];
     for(int i = 0; i<N; i+=1){
         x_values[i] = i;
@@ -41,7 +41,7 @@ int main(int argc, char ** argv){
                                         FFTW_FORWARD, FFTW_ESTIMATE,
                                         &local_ni, &local_i_start,
                                         &local_no, &local_o_start);
-    printf("I am process %d | local_no = %td | local_o_start = %td    || alloc_local = %td\n", rnk+1, local_ni, local_i_start, alloc_local);
+    //printf("I am process %d | local_no = %td | local_o_start = %td    || alloc_local = %td\n", rnk+1, local_ni, local_i_start, alloc_local);
     
     // ALLOCATING DATA (at individual processes)
     fftw_complex *local_in, *local_out;
@@ -59,14 +59,14 @@ int main(int argc, char ** argv){
     for (i=0;i<local_ni;i++)
         local_in[i][0] = in[local_i_start+i][0];
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     // PRINTING THE INPUT (of each process)
-    print_complex_array(local_in, local_ni);
+    //print_complex_array(local_in, local_ni);
 
-    MPI_Barrier(MPI_COMM_WORLD);
-    printf("\n");
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
+    //printf("\n");
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     // NOW THE TRANSFORM
     fftw_execute(p);
@@ -91,7 +91,7 @@ int main(int argc, char ** argv){
 /*
 
 También hay que linkear mpich con -lmpich al parecer entonces queda:
-gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich
+gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall
 y luego.. :
 mpiexec -n 4 ./a.out 
 
