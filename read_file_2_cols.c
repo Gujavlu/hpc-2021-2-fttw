@@ -26,12 +26,44 @@ void string_to_complex(const char *array_in, int n, fftw_complex comp_out){//, d
     sscanf(p, "%lf", &comp_out[1]);
 }
 
+
+void load_data(fftw_complex in[], int arr_len, int n, int start_pos){
+    /* Most of this function is from "read_binary_samples.c" 
+       which has the following licence:
+       Copyright (C) 2021 Juan Luis Ruiz Vanegas (juanluisruiz971@comunidad.unam.mx)
+       MIT License*/
+    struct Complex{
+        float real, imaginary;
+    };
+    
+    FILE *ptr_myfile;
+    struct Complex signal;
+
+    ptr_myfile=fopen("samples.iq","rb");
+    if(!ptr_myfile){
+        printf("Unable to open file!\n");
+        //return 1;
+    }
+    for(int i=0; i < arr_len; i++){
+        if(i >= start_pos){
+            if(i < start_pos+n){
+                fread(&signal,sizeof(struct Complex),1,ptr_myfile);
+                in[i][0] = signal.real;
+                in[i][1] = signal.imaginary;
+            }
+        }
+    }
+    fclose(ptr_myfile);
+}
+
+
 int main(){
+    const ptrdiff_t N = 128;
     char fileLine[100]; // Will hold each line of input
     fptr = fopen("out.txt","r");
 
     fftw_complex *local_in;
-    local_in = fftw_alloc_complex(128);
+    local_in = fftw_alloc_complex(N);
 
     if(fptr != 0){
         int i = 0;
@@ -45,15 +77,21 @@ int main(){
         printf("\nError opening file.\n");
     
 
-    print_complex_array(local_in, 128);
+    //print_complex_array(local_in, N);
     fclose(fptr);
-  
+    
+    fftw_complex *local_in_2;
+    local_in_2 = fftw_alloc_complex(N);
+    load_data(local_in_2, 15, 7, 7);
+    print_complex_array(local_in_2, 15);
     return 0;
 }
 
 // Run like this:
 // gcc read_file.c -lfftw3
 
+// I guess it would be easier if I read the file directly in the
+// function instead of passing it like an argument from main.
 
 /*
 #include<string.h>
