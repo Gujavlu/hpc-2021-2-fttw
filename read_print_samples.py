@@ -44,7 +44,7 @@ def read_print_samples(center_freq):
     # Now save to an IQ file
     samples = samples.astype(np.complex64) # Convert to 64
     print(type(samples[0])) # Verify it's 64
-    samples.tofile('samples.iq') # Save to file
+    samples.tofile('samples_2048samples_97.6Mhz.iq') # Save to file
 
     """
     In Python, the default complex type is np.complex128, which uses two 64-bit floats per sample. 
