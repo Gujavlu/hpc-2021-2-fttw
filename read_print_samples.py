@@ -30,7 +30,7 @@ def read_print_samples(center_freq):
     sdr.freq_correction = 60   # PPM
     """
     sdr.center_freq = center_freq     # Hz 
-    sdr.sample_rate =  230000 #230KHz
+    sdr.sample_rate =  2300000 #230KHz
     """
     #Nyquist theorem # Hz
     optimum sample_rate: 2B
@@ -39,7 +39,7 @@ def read_print_samples(center_freq):
     sdr.freq_correction = 1 #PPM
     sdr.gain = 'auto'
     
-    samples = sdr.read_samples(512) #number  of  samples  or  bytes  to  read 
+    samples = sdr.read_samples(2048) #number  of  samples  or  bytes  to  read 
 
     # Now save to an IQ file
     samples = samples.astype(np.complex64) # Convert to 64
