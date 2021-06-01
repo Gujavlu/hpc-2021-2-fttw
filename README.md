@@ -14,16 +14,14 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 
 ## Run
 ### Processing toy signal and printing its fft to a file (fftw3+mpi implemented)
+#### Example
 ##### IN:
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
-mpiexec -n 4 ./a.out
+mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
 ```
 ##### OUT FILE:  
 `out.txt`
-
-## TO DO
-- Read signal from file
 
 ## Next
 Create a open service with this process
