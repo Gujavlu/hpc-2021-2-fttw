@@ -23,7 +23,7 @@ void print_to_file(const fftw_complex arr[], const int n, char OUTPUT_FILE_PATH[
 }
 
 void load_data(fftw_complex in[], int N, int n, int start_read, char INPUT_FILE_PATH[]){
-    /* Most of this function is from "read_binary_samples.c" file in this repository
+    /* Some of this function (load_data) is from "read_binary_samples.c" file in this repository
        which has the following licence:
        Copyright (C) 2021 Juan Luis Ruiz Vanegas (juanluisruiz971@comunidad.unam.mx)
        MIT License*/
@@ -39,16 +39,24 @@ void load_data(fftw_complex in[], int N, int n, int start_read, char INPUT_FILE_
         printf("Unable to open file!\n");
         //return 1;
     }
-    for(int i=0; i < N; i++){
-        fread(&signal,sizeof(struct Complex),1,ptr_myfile);  // Maybe start reading at the exact memory directin instead of reading from the beginning.
+    /*for(int i=0; i < N; i++){
+        fread(&signal,sizeof(struct Complex),1,ptr_myfile);  // Maybe start reading at the exact memory direction instead of reading from the beginning.
         if(i >= start_read){
             if(i < start_read+n){
                 in[i-start_read][0] = signal.real;
                 in[i-start_read][1] = signal.imaginary;
             }
         }
+    }*/
+
+    // With the following for loop we start reading at the exact memory direction instead of reading from the beginning.
+    int f_no = fileno(ptr_myfile);        
+    for(int i=0; i < n; i++){
+        pread(f_no, &signal, sizeof(struct Complex), sizeof(struct Complex)*(start_read+i));
+        in[i][0] = signal.real;
+        in[i][1] = signal.imaginary;
     }
-        fclose(ptr_myfile);
+    fclose(ptr_myfile);
 }
 
 int main(int argc, char ** argv){
