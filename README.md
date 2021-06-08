@@ -23,5 +23,14 @@ mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
 ##### OUT FILE:  
 `out.txt`
 
+## Methodology
+
+## References
+[fftw](http://www.fftw.org/)      
+[open MPI](https://www.open-mpi.org/)    
+[C programming absolute beginner](https://sjceodisha.in/wp-content/uploads/2019/09/C-Programming-Absolute-Beginner-ssp.indian@gmail.com_.pdf)    
+[hpc-2021-2](https://github.com/JavoJavo/hpc-2021-2)    
+[Docs Oracle](https://docs.oracle.com/)    
+
 ## Next
-Create a open service with this process
+Create an open service with this process
