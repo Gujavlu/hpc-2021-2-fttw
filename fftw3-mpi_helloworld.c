@@ -3,15 +3,16 @@
 #include <math.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 
 void print_complex_array(const fftw_complex arr[], const int n){
     for(int i=0; i < n; i++)
         printf("%f %f\n", arr[i][0],arr[i][1]);
 }
 
-void print_to_file(const fftw_complex arr[], const int n){
+void print_to_file(const fftw_complex arr[], const int n, char OUTPUT_FILE_PATH[]){
     FILE * fptr;
-    fptr = fopen("test.txt" ,"a");
+    fptr = fopen(OUTPUT_FILE_PATH ,"a");
     if (fptr == 0){
         printf("Error--file could not be opened.\n");
         exit (1);
@@ -21,8 +22,8 @@ void print_to_file(const fftw_complex arr[], const int n){
     fclose(fptr);
 }
 
-void load_data(fftw_complex in[], int N, int n, int start_read){
-    /* Most of this function is from "read_binary_samples.c" file in this repository
+void load_data(fftw_complex in[], int N, int n, int start_read, char INPUT_FILE_PATH[]){
+    /* Some of this function (load_data) is from "read_binary_samples.c" file in this repository
        which has the following licence:
        Copyright (C) 2021 Juan Luis Ruiz Vanegas (juanluisruiz971@comunidad.unam.mx)
        MIT License*/
@@ -33,32 +34,47 @@ void load_data(fftw_complex in[], int N, int n, int start_read){
     FILE *ptr_myfile;
     struct Complex signal;
 
-    ptr_myfile=fopen("samples.iq","rb");
+    ptr_myfile=fopen(INPUT_FILE_PATH,"rb");
     if(!ptr_myfile){
         printf("Unable to open file!\n");
         //return 1;
     }
-    for(int i=0; i < N; i++){
-        fread(&signal,sizeof(struct Complex),1,ptr_myfile);  // Maybe start reading at the exact memory directin instead of reading from the beginning.
+    /*for(int i=0; i < N; i++){
+        fread(&signal,sizeof(struct Complex),1,ptr_myfile);  // Maybe start reading at the exact memory direction instead of reading from the beginning.
         if(i >= start_read){
             if(i < start_read+n){
                 in[i-start_read][0] = signal.real;
                 in[i-start_read][1] = signal.imaginary;
             }
         }
+    }*/
+
+    // With the following for loop we start reading at the exact memory direction instead of reading from the beginning.
+    int f_no = fileno(ptr_myfile);        
+    for(int i=0; i < n; i++){
+        pread(f_no, &signal, sizeof(struct Complex), sizeof(struct Complex)*(start_read+i));
+        in[i][0] = signal.real;
+        in[i][1] = signal.imaginary;
     }
-        fclose(ptr_myfile);
+    fclose(ptr_myfile);
 }
 
 int main(int argc, char ** argv){
-    // REMOVING FILE TO DELETE PREVIOUS DATA
-    remove("test.txt");
     
-    // DECLARING NECESSARY VARIABLES
-    const ptrdiff_t N = 14;
+    // DECLARING NECESSARY VARIABLES (loading from command line arguments)
+    if (argc < 4){
+        printf("Missing arguments... \n");
+        exit(1);
+    }
+    ptrdiff_t N;  sscanf(argv[1], "%ld", &N);
+    char * INPUT_FILE_PATH = malloc(strlen(argv[2]));   strcpy(INPUT_FILE_PATH, argv[2]);
+    char * OUTPUT_FILE_PATH = malloc(strlen(argv[3]));   strcpy(OUTPUT_FILE_PATH, argv[3]);
+    
     fftw_plan p;
     ptrdiff_t alloc_local, local_ni, local_no, local_i_start, local_o_start;
     
+    //REMOVING FILE TO DELETE PREVIOUS DATA
+    remove(OUTPUT_FILE_PATH);
 
     MPI_Init(&argc, &argv);
     fftw_mpi_init();
@@ -84,7 +100,7 @@ int main(int argc, char ** argv){
 
     
     // THEN WE HAVE TO INITIALLIZE THE DATA (in each individual process)
-    load_data(local_in, N, local_ni, local_i_start);
+    load_data(local_in, N, local_ni, local_i_start, INPUT_FILE_PATH);
 
     //MPI_Barrier(MPI_COMM_WORLD);
 
@@ -109,7 +125,7 @@ int main(int argc, char ** argv){
         //sleep(1);
         if(i==rnk){
             //print_complex_array(local_out, local_no);
-            print_to_file(local_out, local_no);
+            print_to_file(local_out, local_no, OUTPUT_FILE_PATH);
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
@@ -125,6 +141,7 @@ int main(int argc, char ** argv){
 /*
 We also have to link mpich with -lmpich:
 gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall
-and then.. :  (where n is the number of processes)
-mpiexec -n 4 ./a.out 
+and then.. :  (where n is the number of processes, argv[1] is the number of samples, argv[2] is the input file, and argv[3] is the output file)
+Example:
+mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
 */
