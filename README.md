@@ -18,10 +18,10 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 ##### IN:
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
-mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
+mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ```
 ##### OUT FILE:  
-`out.txt`
+`out.iq`
 
 ## Methodology
 

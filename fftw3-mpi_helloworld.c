@@ -10,15 +10,23 @@ void print_complex_array(const fftw_complex arr[], const int n){
         printf("%f %f\n", arr[i][0],arr[i][1]);
 }
 
-void print_to_file(const fftw_complex arr[], const int n, char OUTPUT_FILE_PATH[]){
+void print_to_file(const fftw_complex arr[], const int n, int start_write, char OUTPUT_FILE_PATH[]){
     FILE * fptr;
-    fptr = fopen(OUTPUT_FILE_PATH ,"a");
+    struct Complex{
+        float real, imaginary;
+    };
+    struct Complex signal;
+    fptr = fopen(OUTPUT_FILE_PATH ,"ab");
     if (fptr == 0){
         printf("Error--file could not be opened.\n");
         exit (1);
     }
-    for(int i=0; i < n; i++)
-        fprintf(fptr, "%f %f\n", arr[i][0],arr[i][1]);
+    int f_no = fileno(fptr); 
+    for(int i=0; i < n; i++){
+        signal.real = arr[i][0];
+        signal.imaginary = arr[i][1];
+        write(f_no, &signal, sizeof(struct Complex));// with pwrite (but it hasn't worked) add offset paramenter and remove loop in main: sizeof(struct Complex)*(start_write+i));
+    }
     fclose(fptr);
 }
 
@@ -125,7 +133,7 @@ int main(int argc, char ** argv){
         //sleep(1);
         if(i==rnk){
             //print_complex_array(local_out, local_no);
-            print_to_file(local_out, local_no, OUTPUT_FILE_PATH);
+            print_to_file(local_out, local_no, local_o_start, OUTPUT_FILE_PATH);
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
