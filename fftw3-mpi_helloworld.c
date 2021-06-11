@@ -151,5 +151,5 @@ We also have to link mpich with -lmpich:
 gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall
 and then.. :  (where n is the number of processes, argv[1] is the number of samples, argv[2] is the input file, and argv[3] is the output file)
 Example:
-mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
+mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 */
