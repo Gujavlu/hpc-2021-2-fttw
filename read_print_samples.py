@@ -30,7 +30,7 @@ def read_print_samples(center_freq):
     sdr.freq_correction = 60   # PPM
     """
     sdr.center_freq = center_freq     # Hz 
-    sdr.sample_rate =  2300000 #230KHz
+    sdr.sample_rate =  center_freq * 2 #230KHz Muestras por segundo 
     """
     #Nyquist theorem # Hz
     optimum sample_rate: 2B
