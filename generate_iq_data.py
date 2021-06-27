@@ -33,7 +33,7 @@ def read_print_samples(center_freq):
     sdr.freq_correction = 60   # PPM
     """
     
-    sdr.center_freq = 32768     # Hz 
+    sdr.center_freq = center_freq     # Hz 
     
     #sdr.sample_rate =  230000#center_freq * 2 #(230KHz min samples by sec) Muestras por segundo 
     sdr.sample_rate = 2.048e6  # Hz
