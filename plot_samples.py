@@ -9,7 +9,7 @@ def plot_file(INPUT_FILE_PATH):
     plt.show()
 
 if __name__=="__main__":
-    plot_file( sys.argv[1] ) #Center frequency (radio station [Hz])
+    plot_file( sys.argv[1] ) #IQ FILE PATH 
     print(sys.argv[1])
     """
     Run:
