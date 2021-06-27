@@ -12,6 +12,9 @@ Licensed works, modifications, and larger works may be distributed under differe
 from rtlsdr import RtlSdr
 import numpy as np 
 import sys
+import os.path
+from datetime import date
+from pathlib import Path
 
 
 def read_print_samples(center_freq):
@@ -29,24 +32,29 @@ def read_print_samples(center_freq):
     sdr.center_freq = 70e6     # Hz
     sdr.freq_correction = 60   # PPM
     """
+    
     sdr.center_freq = 32768     # Hz 
-    sdr.sample_rate =  230000#center_freq * 2 #(230KHz min samples by sec) Muestras por segundo 
-    """
-    #Nyquist theorem # Hz
-    optimum sample_rate: 2B
-    Sample rate should be twice the bandwidth
-    """
+    
+    #sdr.sample_rate =  230000#center_freq * 2 #(230KHz min samples by sec) Muestras por segundo 
+    sdr.sample_rate = 2.048e6  # Hz
+    
     sdr.freq_correction = 1 #PPM
     sdr.gain = 'auto'
     
     number_samples = 4194304 #number  of  samples  or  bytes  to  read 
     samples = sdr.read_samples(number_samples) 
 
-    # Now save to an IQ file
+    #--- Now save to an IQ file ----#
     samples = samples.astype(np.complex64) # Convert to 64
-    print(type(samples[0])) # Verify it's 64
+    
+    ##---- Check if directory exists... if not, create it   ---##
+    date_ = date.today()
+    PATH = 'samples/'+str(date_.year)+'/'+str(date_.month)+'/'+str(date_.day)
+    Path(PATH).mkdir(parents=True, exist_ok=True)
+    
     filename = 'number_samples:'+str(number_samples)+"-center_freq:"+str(center_freq)+'_Mhz.iq'
-    samples.tofile(filename) # Save to file
+    SAVE = os.path.join(PATH, filename)
+    samples.tofile(SAVE) # Save to file
     print("file {} created".format(filename))
 
     """
