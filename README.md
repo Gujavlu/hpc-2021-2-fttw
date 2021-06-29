@@ -8,12 +8,12 @@ Gustavo Zarate - <gustavo.zarate.389.cb84@gmail.com>
 
 ## Affiliation
 ![UNAM ENES affiliation](UNAM_ENES.png)   
-We are Bachelor of Science in Information Technologies ("Licenciatura Tecnologías para la Inforamción en Ciencias") students at 6° semester (at editing date-time) at UNAM ("Universidad Nacional Autónoma de México") at the ENES ("Escuela Nacional de Estudios Superiores Unidad Morelia").
+We are Bachelor of Science in Information Technologies ("Licenciatura Tecnologías para la Información en Ciencias") students at 6° semester (at editing date-time) at UNAM ("Universidad Nacional Autónoma de México") at the ENES ("Escuela Nacional de Estudios Superiores Unidad Morelia").
 
 ## License
 MIT License
 
-## Objetives
+## Objectives
 With this project we want to create a solution to divide multiple frequencies mixed in a wave parallelizing the process to get fast results.
 
 ## Definition
@@ -33,9 +33,9 @@ mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 ```
 mpiexec -n <number_of_processes> ./<executable_file> <number_of_samples> <input_file_path> <output_file_path>
 ```
-The first command is run as it is. (You can run it one time and then reuse the executable file `a.out` for any input)
+The first command is run as it is. (You can run it one time and then reuse the executable file `a.out` for any input). Linking library files is required.
 
-In the second command the first parameter is the number of processes that are going to be generated, the second parameter is the executable file, the third parameter is the number of samples in the input file path which is the fourth parameter, and the last parameter is the file path where the fftw is going to be written.
+In the second command the first argument is the number of processes that are going to be generated, the second argument is the executable file, the third argument is the number of samples in the input file path which is the fourth argument, and the last argument is the file path where the fftw is going to be written.
 ### Visualizing results
 ### Benchmarking with number of processes
 ### Example
@@ -56,6 +56,33 @@ mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ## Methodology
 ### Receiving signal sample 
 ### Processing signal (fftw)
+The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this process.   
+1. Declares necessary variables
+    - N: number of samples in the input file (intialized with arguments)
+    - INPUT_FILE_PATH: (initialized with arguments)
+    - OUTPUT_FILE_PATH: (initialized with arguments)
+    - p: variable where the 'plan' to perform the fftw is going to be
+    - alloc_local: variable for number of complex numbers to allocate in each process
+    - local_ni: variable for each of the processes' part of the input array
+    - local_no: variable for each of the processes' output array
+    - local_i_start: variable for the offset (number of complex numbers) to start reading the input array for each process
+    - local_o_start: variable for the offset (number of complex numbers) to start writing the output array for each process
+2. Removes previous output file (if it exists with the same current output path)
+3. Initializes n processes with MPI (from now on everything runs in parallel in each process)
+    1. Divides input array between all processes using `fftw_mpi_local_size_1d`. 
+        - Initializes (gives value to):
+            - local_ni
+            - local_i_start
+            - local_no
+            - local_o_start
+    2. Declares and allocates data to write and process part of the array in each process
+        - local_in: array variable to write on the local (of each process) input array
+        - local_out: array variable to write on the local (of each process) output array
+    3. Makes fftw plan. The plan optimizes the process considering system and input specifications.
+    4. Initializes the local arrays reading from the input file path. Unix library function `pread` is used to read in parallel the input file at a certain offset so each process reads just the part of the array that it needs.
+    5. Executes the fftw (using the plan `p`).
+    6. Writes the output to the output file path. This step is done in a serial manner (first process writes and the others wait, then the second writes and the others wait, then ...), though an upgrade would be writing in parallel with `pwrite` (tried and failed :( for now..).
+4. Finalizes n processes with MPI and cleans
 ### Visualizing results
 
 ## References
