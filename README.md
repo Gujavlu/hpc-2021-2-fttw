@@ -7,7 +7,7 @@ Juan Luis Ruiz - <juanluisruiz971@comunidad.unam.mx>
 Gustavo Zarate - <gustavo.zarate.389.cb84@gmail.com>   
 
 ## Affiliation
-![UNAM ENES affiliation](UNAM_ENES.png)   
+![UNAM ENES affiliation](images/UNAM_ENES.png)   
 We are Bachelor of Science in Information Technologies ("Licenciatura Tecnologías para la Información en Ciencias") students at 6° semester (at editing date-time) at UNAM ("Universidad Nacional Autónoma de México") at the ENES ("Escuela Nacional de Estudios Superiores Unidad Morelia").
 
 ## License
@@ -37,6 +37,10 @@ The first command is run as it is. (You can run it one time and then reuse the e
 
 In the second command the first argument is the number of processes that are going to be generated, the second argument is the executable file, the third argument is the number of samples in the input file path which is the fourth argument, and the last argument is the file path where the fftw is going to be written.
 ### Visualizing results
+##### z axis projection
+```
+python3 plot_samples.py <INPUT_FILE_PATH>
+```
 ### Benchmarking with number of processes
 ### Example
 #### Receiving signal
@@ -49,6 +53,11 @@ mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ##### OUT FILE:  
 `out.iq`
 #### Visualizing results
+##### z axis projection
+```
+python3 plot_samples.py out.iq
+```
+![z axis projection example](images/z_proj_ex.png)
 #### Benchmarking with number of processes
 
 ## Introduction
@@ -84,6 +93,8 @@ The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this p
     6. Writes the output to the output file path. This step is done in a serial manner (first process writes and the others wait, then the second writes and the others wait, then ...), though an upgrade would be writing in parallel with `pwrite` (tried and failed :( for now..).
 4. Finalizes n processes with MPI and cleans
 ### Visualizing results
+#### z axis projection
+File with signal samples is read with python's numpy and graphed with matplotlib. The x axis is the real part of the complex number and the y axis is the imaginary part. Every point is a single sample.
 
 ## References
 [fftw](http://www.fftw.org/)      
