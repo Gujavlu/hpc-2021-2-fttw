@@ -1,6 +1,43 @@
 # hpc-2021-2-fftw
 Parallelization of the fast fourier transform (1d) in C.
 
+## Table of contents
+- [hpc-2021-2-fftw](#hpc-2021-2-fftw)
+  * [Table of contents](#table-of-contents)
+  * [Authors](#authors)
+  * [Affiliation](#affiliation)
+  * [License](#license)
+  * [Objectives](#objectives)
+  * [Definition](#definition)
+  * [Requirements](#requirements)
+  * [Run](#run)
+    + [Receiving signal](#receiving-signal)
+    + [Processing signal (fftw)](#processing-signal--fftw-)
+    + [Visualizing results](#visualizing-results)
+      - [z axis projection](#z-axis-projection)
+    + [Benchmarking with number of processes](#benchmarking-with-number-of-processes)
+    + [Example](#example)
+      - [Receiving signal](#receiving-signal-1)
+      - [Processing signal (fftw)](#processing-signal--fftw--1)
+        * [IN:](#in-)
+        * [OUT FILE:](#out-file-)
+      - [Visualizing results](#visualizing-results-1)
+        * [z axis projection](#z-axis-projection-1)
+      - [Benchmarking with number of processes](#benchmarking-with-number-of-processes-1)
+  * [Introduction](#introduction)
+  * [Methodology](#methodology)
+    + [Receiving signal sample](#receiving-signal-sample)
+    + [Processing signal (fftw)](#processing-signal--fftw--2)
+    + [Visualizing results](#visualizing-results-2)
+      - [z axis projection](#z-axis-projection-2)
+    + [Benchmarking with number of processes](#benchmarking-with-number-of-processes-2)
+  * [References](#references)
+  * [Next](#next)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
+
 ## Authors
 Javier Navarro - <javiernavarro@comunidad.unam.mx>   
 Juan Luis Ruiz - <juanluisruiz971@comunidad.unam.mx>   
@@ -26,6 +63,7 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 
 ## Run
 ### Receiving signal
+_( Pending ... )_
 ### Processing signal (fftw)
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
@@ -37,13 +75,15 @@ The first command is run as it is. (You can run it one time and then reuse the e
 
 In the second command the first argument is the number of processes that are going to be generated, the second argument is the executable file, the third argument is the number of samples in the input file path which is the fourth argument, and the last argument is the file path where the fftw is going to be written.
 ### Visualizing results
-##### z axis projection
+#### z axis projection
 ```
 python3 plot_samples.py <INPUT_FILE_PATH>
 ```
 ### Benchmarking with number of processes
+_( Pending ... )_
 ### Example
 #### Receiving signal
+_( Pending ... )_
 #### Processing signal (fftw)
 ##### IN:
 ```
@@ -59,11 +99,14 @@ python3 plot_samples.py out.iq
 ```
 ![z axis projection example](images/z_proj_ex.png)
 #### Benchmarking with number of processes
+_( Pending ... )_
 
 ## Introduction
+_( Pending ... )_
 
 ## Methodology
 ### Receiving signal sample 
+_( Pending ... )_
 ### Processing signal (fftw)
 The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this process.   
 1. Declares necessary variables
@@ -95,13 +138,16 @@ The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this p
 ### Visualizing results
 #### z axis projection
 File with signal samples is read with python's numpy and graphed with matplotlib. The x axis is the real part of the complex number and the y axis is the imaginary part. Every point is a single sample.
+### Benchmarking with number of processes
+_( Pending ... )_
 
 ## References
 [fftw](http://www.fftw.org/)      
 [open MPI](https://www.open-mpi.org/)    
 [C programming absolute beginner](https://sjceodisha.in/wp-content/uploads/2019/09/C-Programming-Absolute-Beginner-ssp.indian@gmail.com_.pdf)    
 [hpc-2021-2](https://github.com/JavoJavo/hpc-2021-2)    
-[Docs Oracle](https://docs.oracle.com/)    
+[Docs Oracle](https://docs.oracle.com/)
+[markdown-toc](https://ecotrust-canada.github.io/markdown-toc/)    
 
 ## Next
 Create an open service with this process
