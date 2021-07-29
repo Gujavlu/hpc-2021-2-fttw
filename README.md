@@ -30,9 +30,6 @@ Parallelization of the fast fourier transform (1d) in C.
 - [References](#references)
 - [Next](#next)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
 
 ## Authors
 Javier Navarro - <javiernavarro@comunidad.unam.mx>   
