@@ -2,37 +2,33 @@
 Parallelization of the fast fourier transform (1d) in C.
 
 ## Table of contents
-- [hpc-2021-2-fftw](#hpc-2021-2-fftw)
-  * [Table of contents](#table-of-contents)
-  * [Authors](#authors)
-  * [Affiliation](#affiliation)
-  * [License](#license)
-  * [Objectives](#objectives)
-  * [Definition](#definition)
-  * [Requirements](#requirements)
-  * [Run](#run)
-    + [Receiving signal](#receiving-signal)
-    + [Processing signal (fftw)](#processing-signal--fftw-)
-    + [Visualizing results](#visualizing-results)
-      - [z axis projection](#z-axis-projection)
-    + [Benchmarking with number of processes](#benchmarking-with-number-of-processes)
-    + [Example](#example)
-      - [Receiving signal](#receiving-signal-1)
-      - [Processing signal (fftw)](#processing-signal--fftw--1)
-        * [IN:](#in-)
-        * [OUT FILE:](#out-file-)
-      - [Visualizing results](#visualizing-results-1)
-        * [z axis projection](#z-axis-projection-1)
-      - [Benchmarking with number of processes](#benchmarking-with-number-of-processes-1)
-  * [Introduction](#introduction)
-  * [Methodology](#methodology)
-    + [Receiving signal sample](#receiving-signal-sample)
-    + [Processing signal (fftw)](#processing-signal--fftw--2)
-    + [Visualizing results](#visualizing-results-2)
-      - [z axis projection](#z-axis-projection-2)
-    + [Benchmarking with number of processes](#benchmarking-with-number-of-processes-2)
-  * [References](#references)
-  * [Next](#next)
+- [Authors](#authors)
+- [Affiliation](#affiliation)
+- [License](#license)
+- [Objectives](#objectives)
+- [Definition](#definition)
+- [Requirements](#requirements)
+- [Run](#run)
+  * [Receiving signal](#receiving-signal)
+  * [Processing signal (fftw)](#processing-signal--fftw-)
+  * [Visualizing results](#visualizing-results)
+    + [z axis projection](#z-axis-projection)
+  * [Benchmarking with number of processes](#benchmarking-with-number-of-processes)
+- [Example](#example)
+  * [Receiving signal](#receiving-signal-1)
+  * [Processing signal (fftw)](#processing-signal--fftw--1)
+  * [Visualizing results](#visualizing-results-1)
+    + [z axis projection](#z-axis-projection-1)
+  * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-1)
+- [Introduction](#introduction)
+- [Methodology](#methodology)
+  * [Receiving signal sample](#receiving-signal-sample)
+  * [Processing signal (fftw)](#processing-signal--fftw--2)
+  * [Visualizing results](#visualizing-results-2)
+    + [z axis projection](#z-axis-projection-2)
+  * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-2)
+- [References](#references)
+- [Next](#next)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -81,24 +77,21 @@ python3 plot_samples.py <INPUT_FILE_PATH>
 ```
 ### Benchmarking with number of processes
 _( Pending ... )_
-### Example
-#### Receiving signal
+## Example
+### Receiving signal
 _( Pending ... )_
-#### Processing signal (fftw)
-##### IN:
+### Processing signal (fftw)
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ```
-##### OUT FILE:  
-`out.iq`
-#### Visualizing results
-##### z axis projection
+### Visualizing results
+#### z axis projection
 ```
 python3 plot_samples.py out.iq
 ```
 ![z axis projection example](images/z_proj_ex.png)
-#### Benchmarking with number of processes
+### Benchmarking with number of processes
 _( Pending ... )_
 
 ## Introduction
@@ -146,7 +139,7 @@ _( Pending ... )_
 [open MPI](https://www.open-mpi.org/)    
 [C programming absolute beginner](https://sjceodisha.in/wp-content/uploads/2019/09/C-Programming-Absolute-Beginner-ssp.indian@gmail.com_.pdf)    
 [hpc-2021-2](https://github.com/JavoJavo/hpc-2021-2)    
-[Docs Oracle](https://docs.oracle.com/)
+[Docs Oracle](https://docs.oracle.com/)    
 [markdown-toc](https://ecotrust-canada.github.io/markdown-toc/)    
 
 ## Next
