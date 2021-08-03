@@ -10,19 +10,27 @@ void print_complex_array(const fftw_complex arr[], const int n){
         printf("%f %f\n", arr[i][0],arr[i][1]);
 }
 
-void print_to_file(const fftw_complex arr[], const int n, char OUTPUT_FILE_PATH[]){
+void print_to_file(const fftw_complex local_out[], const int local_no, int local_o_start, char OUTPUT_FILE_PATH[]){
     FILE * fptr;
-    fptr = fopen(OUTPUT_FILE_PATH ,"a");
+    struct Complex{
+        float real, imaginary;
+    };
+    struct Complex signal;
+    fptr = fopen(OUTPUT_FILE_PATH ,"ab");
     if (fptr == 0){
         printf("Error--file could not be opened.\n");
         exit (1);
     }
-    for(int i=0; i < n; i++)
-        fprintf(fptr, "%f %f\n", arr[i][0],arr[i][1]);
+    int f_no = fileno(fptr); 
+    for(int i=0; i < local_no; i++){
+        signal.real = local_out[i][0];
+        signal.imaginary = local_out[i][1];
+        write(f_no, &signal, sizeof(struct Complex));// with pwrite (but it hasn't worked) add offset paramenter and remove loop in main: sizeof(struct Complex)*(start_write+i));
+    }
     fclose(fptr);
 }
 
-void load_data(fftw_complex in[], int N, int n, int start_read, char INPUT_FILE_PATH[]){
+void load_data(fftw_complex local_in[], int local_ni, int local_i_start, char INPUT_FILE_PATH[]){
     /* Some of this function (load_data) is from "read_binary_samples.c" file in this repository
        which has the following licence:
        Copyright (C) 2021 Juan Luis Ruiz Vanegas (juanluisruiz971@comunidad.unam.mx)
@@ -41,20 +49,20 @@ void load_data(fftw_complex in[], int N, int n, int start_read, char INPUT_FILE_
     }
     /*for(int i=0; i < N; i++){
         fread(&signal,sizeof(struct Complex),1,ptr_myfile);  // Maybe start reading at the exact memory direction instead of reading from the beginning.
-        if(i >= start_read){
-            if(i < start_read+n){
-                in[i-start_read][0] = signal.real;
-                in[i-start_read][1] = signal.imaginary;
+        if(i >= local_i_start){
+            if(i < local_i_start+local_ni){
+                local_in[i-local_i_start][0] = signal.real;
+                local_in[i-local_i_start][1] = signal.imaginary;
             }
         }
     }*/
 
     // With the following for loop we start reading at the exact memory direction instead of reading from the beginning.
     int f_no = fileno(ptr_myfile);        
-    for(int i=0; i < n; i++){
-        pread(f_no, &signal, sizeof(struct Complex), sizeof(struct Complex)*(start_read+i));
-        in[i][0] = signal.real;
-        in[i][1] = signal.imaginary;
+    for(int i=0; i < local_ni; i++){
+        pread(f_no, &signal, sizeof(struct Complex), sizeof(struct Complex)*(local_i_start+i));
+        local_in[i][0] = signal.real;
+        local_in[i][1] = signal.imaginary;
     }
     fclose(ptr_myfile);
 }
@@ -100,7 +108,7 @@ int main(int argc, char ** argv){
 
     
     // THEN WE HAVE TO INITIALLIZE THE DATA (in each individual process)
-    load_data(local_in, N, local_ni, local_i_start, INPUT_FILE_PATH);
+    load_data(local_in, local_ni, local_i_start, INPUT_FILE_PATH);
 
     //MPI_Barrier(MPI_COMM_WORLD);
 
@@ -125,7 +133,7 @@ int main(int argc, char ** argv){
         //sleep(1);
         if(i==rnk){
             //print_complex_array(local_out, local_no);
-            print_to_file(local_out, local_no, OUTPUT_FILE_PATH);
+            print_to_file(local_out, local_no, local_o_start, OUTPUT_FILE_PATH);
         }
         MPI_Barrier(MPI_COMM_WORLD);
     }
@@ -143,5 +151,5 @@ We also have to link mpich with -lmpich:
 gcc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall
 and then.. :  (where n is the number of processes, argv[1] is the number of samples, argv[2] is the input file, and argv[3] is the output file)
 Example:
-mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.txt
+mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 */
