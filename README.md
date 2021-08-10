@@ -53,6 +53,8 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 ## Requirements
 - MPI C implementation (we used [mpich library](https://www.mpich.org/)) MPICH 3.4.2
 - [FFTW  library](http://www.fftw.org/) FFTW 3.3.9
+- [GNU Radio](https://www.gnuradio.org/)
+- [pyrtlsdr](https://pyrtlsdr.readthedocs.io/en/latest/Overview.html#pyrtlsdr) A Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR’s)
 
 ## Run
 ### Receiving signal
