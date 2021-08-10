@@ -43,8 +43,8 @@ We are Bachelor of Science in Information Technologies ("Licenciatura Tecnologí
 ## License
 MIT License
 
-## Objectives
-With this project we want to create a solution to divide multiple frequencies mixed in a wave parallelizing the process to get fast results.
+## Objective
+Implement a prototype of a low frequency wave collection system with a SDR device to analyze with Python libraries the ElectroMagnetic Space making use of parallelization techniques of computational processes with the implementation of the Fast Fourier Transform.
 
 ## Definition
 In this project, the Fast Fourier Transform is performed using high-performance computing techniques.
