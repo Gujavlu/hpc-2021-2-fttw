@@ -58,7 +58,9 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 
 ## Run
 ### Receiving signal
-_( Pending ... )_
+```
+python3 generate_iq_data.py <Radio station in Hertz>
+```
 ### Processing signal (fftw)
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
@@ -78,7 +80,9 @@ python3 plot_samples.py <INPUT_FILE_PATH>
 _( Pending ... )_
 ## Example
 ### Receiving signal
-_( Pending ... )_
+```
+python3 generate_iq_data.py 97600000 
+```
 ### Processing signal (fftw)
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
