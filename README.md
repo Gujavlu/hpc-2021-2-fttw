@@ -5,25 +5,25 @@ Parallelization of the fast fourier transform (1d) in C.
 - [Authors](#authors)
 - [Affiliation](#affiliation)
 - [License](#license)
-- [Objectives](#objectives)
+- [Objective](#objective)
 - [Definition](#definition)
 - [Requirements](#requirements)
 - [Run](#run)
   * [Receiving signal](#receiving-signal)
-  * [Processing signal (fftw)](#processing-signal--fftw-)
+  * [Processing signal](#processing-signal)
   * [Visualizing results](#visualizing-results)
     + [z axis projection](#z-axis-projection)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes)
 - [Example](#example)
   * [Receiving signal](#receiving-signal-1)
-  * [Processing signal (fftw)](#processing-signal--fftw--1)
+  * [Processing signal](#processing-signal-1)
   * [Visualizing results](#visualizing-results-1)
     + [z axis projection](#z-axis-projection-1)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-1)
 - [Introduction](#introduction)
 - [Methodology](#methodology)
-  * [Receiving signal sample](#receiving-signal-sample)
-  * [Processing signal (fftw)](#processing-signal--fftw--2)
+  * [Receiving signal](#receiving-signal-2)
+  * [Processing signal](#processing-signal-2)
   * [Visualizing results](#visualizing-results-2)
     + [z axis projection](#z-axis-projection-2)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-2)
@@ -61,7 +61,7 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 ```
 python3 generate_iq_data.py <Radio station in Hertz>
 ```
-### Processing signal (fftw)
+### Processing signal
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 ```
@@ -83,7 +83,7 @@ _( Pending ... )_
 ```
 python3 generate_iq_data.py 97600000 
 ```
-### Processing signal (fftw)
+### Processing signal
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
@@ -103,7 +103,7 @@ The Fourier transform (FT) is a mathematical transform that decomposes functions
 The Fast Fourier transform (FFT) is an algorithm that computes the DFT much faster than computing it directly from the definition. It reduces complexity from _O(N<sup>2</sup>)_ to _O(N log N)_. There are many different FFT algorithms (eg.: Cooley–Tukey FFT algorithm).
 
 ## Methodology
-### Receiving signal sample 
+### Receiving signal
 The .py file `generate_iq_data.py` collects the signals and with the SDR device transforms the analog signals to digital, where they are exported in iq format.
 The workflow is as follows:
 
@@ -120,7 +120,7 @@ The workflow is as follows:
 4. It checks if the folder exists and if not, it creates it, to store the iq file.
 5. Save the iq file
 
-### Processing signal (fftw)
+### Processing signal
 The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this process.   
 1. Declares necessary variables
     - N: number of samples in the input file (intialized with arguments)
