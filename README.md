@@ -98,6 +98,9 @@ python3 plot_samples.py out.iq
 _( Pending ... )_
 
 ## Introduction
+The Fourier transform (FT) is a mathematical transform that decomposes functions often in the time domain (eg.: radio signal that can be picked up by an antenna and naturally varies with time) to functions in the frequency domain. So with a given signal that you pick up and then apply the FT you get a function with the amount of frequencies and their phase (the FT is a complex-valued function). The discrete Fourier transform (DFT) does the same thing but with equally spaced samples of a function.
+
+The Fast Fourier transform (FFT) is an algorithm that computes the DFT much faster than computing it directly from the definition. It reduces complexity from _O(N<sup>2</sup>)_ to _O(N log N)_. There are many different FFT algorithms (eg.: Cooley–Tukey FFT algorithm).
 
 ## Methodology
 ### Receiving signal sample 
