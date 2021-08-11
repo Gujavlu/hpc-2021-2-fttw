@@ -98,11 +98,25 @@ python3 plot_samples.py out.iq
 _( Pending ... )_
 
 ## Introduction
-_( Pending ... )_
 
 ## Methodology
 ### Receiving signal sample 
-_( Pending ... )_
+The .py file `generate_iq_data.py` collects the signals and with the SDR device transforms the analog signals to digital, where they are exported in iq format.
+The workflow is as follows:
+
+1. When the program is executed, the bandwidth over which the measurements are to be made is passed as an argument.
+
+2. Internal operation of the program:
+   - center_freq : Set the center frequency of the device (in Hz)
+   - sample_rate : Set the sample rate of the tuner (in Hz)
+   - freq_correction : Set frequency offset of the tuner (in PPM)
+   - gain : Set gain of the tuner (in dB)
+   - read_samples : Read specified number of complex samples from tuner.
+        - Return: The samples read as either a list or numpy.ndarray
+3. Create a path as a string that is used to store the data in the place we want. 
+4. It checks if the folder exists and if not, it creates it, to store the iq file.
+5. Save the iq file
+
 ### Processing signal (fftw)
 The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this process.   
 1. Declares necessary variables
