@@ -39,9 +39,10 @@ def read_print_samples(center_freq):
     sdr.sample_rate = 2.048e6  # Hz
     
     sdr.freq_correction = 1 #PPM
-    sdr.gain = 'auto'
+    #sdr.gain = 'auto'
+    sdr.gain = 1
     
-    number_samples = 4194304 #number  of  samples  or  bytes  to  read 
+    number_samples = 524288 #number  of  samples  or  bytes  to  read 
     samples = sdr.read_samples(number_samples) 
 
     #--- Now save to an IQ file ----#
@@ -55,7 +56,7 @@ def read_print_samples(center_freq):
     filename = 'number_samples:'+str(number_samples)+"-center_freq:"+str(center_freq)+'_Mhz.iq'
     SAVE = os.path.join(PATH, filename)
     samples.tofile(SAVE) # Save to file
-    print("file {} created".format(filename))
+    print("file {} created at \n\t\t{}".format(filename, PATH))
 
     """
     In Python, the default complex type is np.complex128, which uses two 64-bit floats per sample. 
