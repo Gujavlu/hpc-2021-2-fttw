@@ -93,7 +93,7 @@ mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ```
 python3 plot_samples.py out.iq
 ```
-![z axis projection example](images/z_proj_ex.png)
+![z axis projection example](Images/samples(131072),gain(1),sample_rate(2.048e6).png)
 ### Benchmarking with number of processes
 _( Pending ... )_
 
