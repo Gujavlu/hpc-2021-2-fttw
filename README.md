@@ -5,25 +5,25 @@ Parallelization of the fast fourier transform (1d) in C.
 - [Authors](#authors)
 - [Affiliation](#affiliation)
 - [License](#license)
-- [Objectives](#objectives)
+- [Objective](#objective)
 - [Definition](#definition)
 - [Requirements](#requirements)
 - [Run](#run)
   * [Receiving signal](#receiving-signal)
-  * [Processing signal (fftw)](#processing-signal--fftw-)
+  * [Processing signal](#processing-signal)
   * [Visualizing results](#visualizing-results)
     + [z axis projection](#z-axis-projection)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes)
 - [Example](#example)
   * [Receiving signal](#receiving-signal-1)
-  * [Processing signal (fftw)](#processing-signal--fftw--1)
+  * [Processing signal](#processing-signal-1)
   * [Visualizing results](#visualizing-results-1)
     + [z axis projection](#z-axis-projection-1)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-1)
 - [Introduction](#introduction)
 - [Methodology](#methodology)
-  * [Receiving signal sample](#receiving-signal-sample)
-  * [Processing signal (fftw)](#processing-signal--fftw--2)
+  * [Receiving signal](#receiving-signal-2)
+  * [Processing signal](#processing-signal-2)
   * [Visualizing results](#visualizing-results-2)
     + [z axis projection](#z-axis-projection-2)
   * [Benchmarking with number of processes](#benchmarking-with-number-of-processes-2)
@@ -43,8 +43,8 @@ We are Bachelor of Science in Information Technologies ("Licenciatura Tecnologí
 ## License
 MIT License
 
-## Objectives
-With this project we want to create a solution to divide multiple frequencies mixed in a wave parallelizing the process to get fast results.
+## Objective
+Implement a prototype of a low frequency wave collection system with a SDR device to analyze with Python libraries the ElectroMagnetic Space making use of parallelization techniques of computational processes with the implementation of the Fast Fourier Transform.
 
 ## Definition
 In this project, the Fast Fourier Transform is performed using high-performance computing techniques.
@@ -53,11 +53,15 @@ Compiled in C code with the MPI library to run multiple processes where the FFTW
 ## Requirements
 - MPI C implementation (we used [mpich library](https://www.mpich.org/)) MPICH 3.4.2
 - [FFTW  library](http://www.fftw.org/) FFTW 3.3.9
+- [GNU Radio](https://www.gnuradio.org/)
+- [pyrtlsdr](https://pyrtlsdr.readthedocs.io/en/latest/Overview.html#pyrtlsdr) A Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR’s)
 
 ## Run
 ### Receiving signal
-_( Pending ... )_
-### Processing signal (fftw)
+```
+python3 generate_iq_data.py <Radio station in Hertz>
+```
+### Processing signal
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 ```
@@ -76,8 +80,10 @@ python3 plot_samples.py <INPUT_FILE_PATH>
 _( Pending ... )_
 ## Example
 ### Receiving signal
-_( Pending ... )_
-### Processing signal (fftw)
+```
+python3 generate_iq_data.py 97600000 
+```
+### Processing signal
 ```
 mpicc fftw3-mpi_helloworld.c -lfftw3_mpi -lfftw3 -lm -lmpich -Wall -Ofast
 mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
@@ -87,17 +93,34 @@ mpiexec -n 4 ./a.out 8192 samples/samples_8192samples_97.6Mhz.iq out.iq
 ```
 python3 plot_samples.py out.iq
 ```
-![z axis projection example](images/z_proj_ex.png)
+![z axis projection example](Images/samples(131072),gain(1),sample_rate(2.048e6).png)
 ### Benchmarking with number of processes
 _( Pending ... )_
 
 ## Introduction
-_( Pending ... )_
+The Fourier transform (FT) is a mathematical transform that decomposes functions often in the time domain (eg.: radio signal that can be picked up by an antenna and naturally varies with time) to functions in the frequency domain. So with a given signal that you pick up and then apply the FT you get a function with the amount of frequencies and their phase (the FT is a complex-valued function). The discrete Fourier transform (DFT) does the same thing but with equally spaced samples of a function.
+
+The Fast Fourier transform (FFT) is an algorithm that computes the DFT much faster than computing it directly from the definition. It reduces complexity from _O(N<sup>2</sup>)_ to _O(N log N)_. There are many different FFT algorithms (eg.: Cooley–Tukey FFT algorithm).
 
 ## Methodology
-### Receiving signal sample 
-_( Pending ... )_
-### Processing signal (fftw)
+### Receiving signal
+The .py file `generate_iq_data.py` collects the signals and with the SDR device transforms the analog signals to digital, where they are exported in iq format.
+The workflow is as follows:
+
+1. When the program is executed, the bandwidth over which the measurements are to be made is passed as an argument.
+
+2. Internal operation of the program:
+   - center_freq : Set the center frequency of the device (in Hz)
+   - sample_rate : Set the sample rate of the tuner (in Hz)
+   - freq_correction : Set frequency offset of the tuner (in PPM)
+   - gain : Set gain of the tuner (in dB)
+   - read_samples : Read specified number of complex samples from tuner.
+        - Return: The samples read as either a list or numpy.ndarray
+3. Create a path as a string that is used to store the data in the place we want. 
+4. It checks if the folder exists and if not, it creates it, to store the iq file.
+5. Save the iq file
+
+### Processing signal
 The executable file (`a.out`) compiled from `fttw3-mpi_helloworld.c` does this process.   
 1. Declares necessary variables
     - N: number of samples in the input file (intialized with arguments)
